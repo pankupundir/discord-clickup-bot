@@ -1,0 +1,13 @@
+name = "clickup-discord-bot"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+# Optional: set non-secret vars here
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# DISCORD_PUBLIC_KEY  - Discord application public key
+# CLICKUP_TOKEN       - ClickUp API token
+# LIST_ID             - ClickUp list ID
+# DISCORD_BOT_TOKEN   - Discord bot token
+# DISCORD_CHANNEL_ID  - Discord channel ID for announcements
