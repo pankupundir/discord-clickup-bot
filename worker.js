@@ -71,6 +71,8 @@ async function handleRequest(request) {
     const assigneeId = assign ? USERS[assign.toLowerCase()] : null;
     const assignName = assign ? assign : "Unassigned";
 
+    const creator = jsonBody.member?.user?.username || "Someone";
+
     // -------- CREATE TASK (ANNOUNCE) --------
     if (command === "task") {
 
@@ -85,10 +87,13 @@ async function handleRequest(request) {
       if (taskUrl) {
 
         const message =
-`📢 **New ClickUp Task**
+`${creator} created a new task:
 
-**${title}**
-Assigned to: **${assignName}**
+${title}
+
+${desc}
+
+Assigned to: ${assignName}
 
 ${taskUrl}`;
 
@@ -140,7 +145,8 @@ ${taskUrl}`;
       return new Response(JSON.stringify({
         type: 4,
         data: {
-          content: `[Open ClickUp Task](${link})`
+          content: `[Open ClickUp Task](${link})`,
+          flags: 64
         }
       }), {
         headers: { "Content-Type": "application/json" }
@@ -215,12 +221,12 @@ async function verifyDiscordRequest(body, signature, timestamp, publicKey) {
   const key = await crypto.subtle.importKey(
     "raw",
     hexToUint8Array(publicKey),
-    { name: "Ed25519" },
+    { name: "NODE-ED25519", namedCurve: "NODE-ED25519", public: true },
     true,
     ["verify"]
   );
 
-  return crypto.subtle.verify("Ed25519", key, signatureArray, data);
+  return crypto.subtle.verify("NODE-ED25519", key, signatureArray, data);
 }
 
 function hexToUint8Array(hexString) {
